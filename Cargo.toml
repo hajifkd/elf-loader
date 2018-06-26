@@ -1,0 +1,6 @@
+[package]
+name = "elf-loader"
+version = "0.1.0"
+authors = ["Hajime Fukuda <hajime.fukuda@me.com>"]
+
+[dependencies]
