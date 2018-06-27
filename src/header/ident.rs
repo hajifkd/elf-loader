@@ -33,7 +33,7 @@ pub enum ElfVersion {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug)]
 pub enum ElfOSABI {
-    Sysv = 0,
+    SysV = 0,
     HPUX = 1,
     NetBSD = 2,
     Linux = 3,
