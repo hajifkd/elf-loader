@@ -1,6 +1,8 @@
 use super::elf_type;
 use super::ident;
 use super::machine;
+use super::prog_head::flag;
+use super::prog_head::prog_head_type;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -36,21 +38,21 @@ pub enum ProgramHeaders {
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct ProgramHeader32 {
-    pub prog_type: u32,
+    pub prog_head_type: prog_head_type::ProgramHeaderType,
     pub offset: u32,
     pub vert_addr: u32,
     pub phys_addr: u32,
     pub file_size: u32,
     pub mem_size: u32,
-    pub flags: u32,
+    pub flags: flag::SegmentFlag,
     pub align: u32,
 }
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct ProgramHeader64 {
-    pub prog_type: u32,
-    pub flags: u32,
+    pub prog_head_type: prog_head_type::ProgramHeaderType,
+    pub flags: flag::SegmentFlag,
     pub offset: u64,
     pub vert_addr: u64,
     pub phys_addr: u64,
