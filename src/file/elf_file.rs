@@ -1,5 +1,6 @@
 use header::header::*;
 use header::ident::*;
+use header::prog_header::*;
 use std;
 use std::fs::File;
 use std::io::SeekFrom;
@@ -61,20 +62,19 @@ impl ElfFile {
             mem::size_of::<ProgramHeader64>()
         };
 
-        assert_eq!(header_size, self.header.prog_head_entry_size as _);
-        let total_size = header_size * self.header.prog_head_entry_num as usize;
-        let offset = self.header.prog_head_offset as _;
+        assert_eq!(header_size, self.header.prog_header_entry_size as _);
+        let total_size = header_size * self.header.prog_header_entry_num as usize;
+        let offset = self.header.prog_header_offset as _;
 
         unsafe {
             if is_32 {
                 let mut v =
-                    vec![mem::zeroed::<ProgramHeader32>(); self.header.prog_head_entry_num as _];
+                    vec![mem::zeroed::<ProgramHeader32>(); self.header.prog_header_entry_num as _];
                 self.read_into_ptr(v.as_mut_ptr() as _, total_size, offset)?;
-
                 Ok(ProgramHeaders::Header32(v))
             } else {
                 let mut v =
-                    vec![mem::zeroed::<ProgramHeader64>(); self.header.prog_head_entry_num as _];
+                    vec![mem::zeroed::<ProgramHeader64>(); self.header.prog_header_entry_num as _];
                 self.read_into_ptr(v.as_mut_ptr() as _, total_size, offset)?;
                 Ok(ProgramHeaders::Header64(v))
             }

@@ -1,8 +1,6 @@
 use super::elf_type;
 use super::ident;
 use super::machine;
-use super::prog_head::flag;
-use super::prog_head::prog_head_type;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -18,47 +16,15 @@ pub struct ElfHeader {
     pub machine: machine::ElfMachine,
     pub version: u32,
     pub entry: usize,
-    pub prog_head_offset: usize,
-    pub sect_head_offset: usize,
+    pub prog_header_offset: usize,
+    pub sect_header_offset: usize,
     pub flags: u32, // not used
     pub elf_header_size: u16,
-    pub prog_head_entry_size: u16,
-    pub prog_head_entry_num: u16,
-    pub sect_head_entry_size: u16,
-    pub sect_head_entry_num: u16,
-    pub sect_head_tbl_index: u16,
-}
-
-#[derive(Debug, Clone)]
-pub enum ProgramHeaders {
-    Header32(Vec<ProgramHeader32>),
-    Header64(Vec<ProgramHeader64>),
-}
-
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct ProgramHeader32 {
-    pub prog_head_type: prog_head_type::ProgramHeaderType,
-    pub offset: u32,
-    pub vert_addr: u32,
-    pub phys_addr: u32,
-    pub file_size: u32,
-    pub mem_size: u32,
-    pub flags: flag::SegmentFlag,
-    pub align: u32,
-}
-
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct ProgramHeader64 {
-    pub prog_head_type: prog_head_type::ProgramHeaderType,
-    pub flags: flag::SegmentFlag,
-    pub offset: u64,
-    pub vert_addr: u64,
-    pub phys_addr: u64,
-    pub file_size: u64,
-    pub mem_size: u64,
-    pub align: u64,
+    pub prog_header_entry_size: u16,
+    pub prog_header_entry_num: u16,
+    pub sect_header_entry_size: u16,
+    pub sect_header_entry_num: u16,
+    pub sect_header_tbl_index: u16,
 }
 
 #[derive(Debug, Clone)]
