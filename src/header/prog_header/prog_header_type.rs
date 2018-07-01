@@ -1,16 +1,17 @@
-#[repr(u32)]
-#[derive(Debug, Copy, Clone)]
-pub enum ProgramHeaderType {
-    Null = 0,
-    Loadable = 1,
-    DynamicLinking = 2,
-    Interpreter = 3,
-    Note = 4,
-    Shlib = 5,
-    ProgramHeader = 6,
-    ThreadLocalStroage = 7,
+cenums! {
+    #[repr(C)]
+    pub struct ProgramHeaderType: u32 {
+        const NULL = 0;
+        const LOADABLE = 1;
+        const DYNAMIC_LINKING = 2;
+        const INTERPRETER = 3;
+        const NOTE = 4;
+        const SHLIB = 5;
+        const PROGRAM_HEADER = 6;
+        const THREAD_LOCAL_STORAGE = 7;
 
-    GnuEHFrame = 0x6474e550,
-    GnuStack = 0x6474e551,
-    GnuRelro = 0x6474e552,
+        const GNU_EH_FRAME = 0x6474e550;
+        const GNU_STACK = 0x6474e551;
+        const GNU_RELRO = 0x6474e552;
+    }
 }

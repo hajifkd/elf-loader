@@ -1,9 +1,10 @@
-#[repr(u16)]
-#[derive(Copy, Clone, Debug)]
-pub enum ElfType {
-    None = 0,
-    Relocatable = 1,
-    Executable = 2,
-    SharedObject = 3,
-    Core = 4,
+cenums! {
+    #[repr(C)]
+    pub struct ElfType: u16 {
+        const NONE = 0;
+        const RELOCATABLE = 1;
+        const EXECUTABLE = 2;
+        const SHAREDOBJECT = 3;
+        const CORE = 4;
+    }
 }

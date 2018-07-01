@@ -6,3 +6,4 @@ authors = ["Hajime Fukuda <hajime.fukuda@me.com>"]
 [dependencies]
 libc = "0.2"
 bitflags = "1.0"
+cenums = {version = "0.1", git = "https://github.com/hajifkd/cenums"}

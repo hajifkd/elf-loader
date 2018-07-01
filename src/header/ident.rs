@@ -1,51 +1,56 @@
-#[repr(u8)]
-#[derive(Copy, Clone, Debug)]
-pub enum ElfMagic {
-    Magic0 = 0x7f,
-    Magic1 = 'E' as _,
-    Magic2 = 'L' as _,
-    Magic3 = 'F' as _,
+cenums! {
+    #[repr(C)]
+    pub struct ElfMagic: u8 {
+        const MAGIC0 = 0x7f;
+        const MAGIC1 = 'E' as _;
+        const MAGIC2 = 'L' as _;
+        const MAGIC3 = 'F' as _;
+    }
 }
 
-#[repr(u8)]
-#[derive(Copy, Clone, Debug)]
-pub enum ElfFileClass {
-    None = 0,
-    Class32 = 1,
-    Class64 = 2,
+cenums! {
+    #[repr(C)]
+    pub struct ElfFileClass: u8 {
+        const NONE = 0;
+        const CLASS32 = 1;
+        const CLASS64 = 2;
+    }
 }
 
-#[repr(u8)]
-#[derive(Copy, Clone, Debug)]
-pub enum ElfDataEncoding {
-    None = 0,
-    LittleEndian = 1,
-    BigEndian = 2,
+cenums! {
+    #[repr(C)]
+    pub struct ElfDataEncoding: u8 {
+        const NONE = 0;
+        const LITTLE_ENDIAN = 1;
+        const BIG_ENDIAN = 2;
+    }
 }
 
-#[repr(u8)]
-#[derive(Copy, Clone, Debug)]
-pub enum ElfVersion {
-    None = 0,
-    Current = 1,
+cenums! {
+    #[repr(C)]
+    pub struct ElfVersion: u8 {
+        const NONE = 0;
+        const CURRENT = 1;
+    }
 }
 
-#[repr(u8)]
-#[derive(Copy, Clone, Debug)]
-pub enum ElfOSABI {
-    SysV = 0,
-    HPUX = 1,
-    NetBSD = 2,
-    Linux = 3,
-    Hurd = 4,
-    _86Open = 5,
-    Solaris = 6,
-    Monterey = 7,
-    IRIX = 8,
-    FreeBSD = 9,
-    TRU64 = 10,
-    Modesto = 11,
-    OpenBSD = 12,
-    ARM = 97,
-    StandAlone = 255,
+cenums! {
+    #[repr(C)]
+    pub struct ElfOsAbi: u8 {
+        const SYSV = 0;
+        const HPUX = 1;
+        const NETBSD = 2;
+        const LINUX = 3;
+        const HURD = 4;
+        const _86OPEN = 5;
+        const SOLARIS = 6;
+        const MONTEREY = 7;
+        const IRIX = 8;
+        const FREEBSD = 9;
+        const TRU64 = 10;
+        const MODESTO = 11;
+        const OPENBSD = 12;
+        const ARM = 97;
+        const STANDALONE = 255;
+    }
 }

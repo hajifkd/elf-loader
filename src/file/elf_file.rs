@@ -46,8 +46,8 @@ impl ElfFile {
 
     pub fn prog_headers(&mut self) -> Result<ProgramHeaders, std::io::Error> {
         let is_32 = match self.header.file_class {
-            ElfFileClass::Class32 => true,
-            ElfFileClass::Class64 => false,
+            ElfFileClass::CLASS32 => true,
+            ElfFileClass::CLASS64 => false,
             _ => {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::InvalidData,
