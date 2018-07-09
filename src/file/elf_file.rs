@@ -1,6 +1,7 @@
 use header::header::*;
 use header::ident::*;
 use header::prog_header::*;
+use header::sect_header::*;
 use std;
 use std::fs::File;
 use std::io::SeekFrom;
@@ -12,6 +13,28 @@ use std::slice;
 pub struct ElfFile {
     header: ElfHeader,
     file: File,
+}
+
+macro_rules! read_header {
+    ($fn_name:ident, $sum_type:ident, $entry_size:ident, $entry_num:ident, $offset: ident) => {
+        pub fn $fn_name(&mut self) -> Result<$sum_type, std::io::Error> {
+            let is_32 = self.is_32()?;
+            let total_size = self.header.$entry_size as usize * self.header.$entry_num as usize;
+            let offset = self.header.$offset as _;
+
+            unsafe {
+                if is_32 {
+                    let mut v = vec![mem::zeroed(); self.header.$entry_num as _];
+                    self.read_into_ptr(v.as_mut_ptr() as _, total_size, offset)?;
+                    Ok($sum_type::Header32(v))
+                } else {
+                    let mut v = vec![mem::zeroed(); self.header.$entry_num as _];
+                    self.read_into_ptr(v.as_mut_ptr() as _, total_size, offset)?;
+                    Ok($sum_type::Header64(v))
+                }
+            }
+        }
+    };
 }
 
 impl ElfFile {
@@ -44,40 +67,32 @@ impl ElfFile {
         Ok(())
     }
 
-    pub fn prog_headers(&mut self) -> Result<ProgramHeaders, std::io::Error> {
-        let is_32 = match self.header.file_class {
-            ElfFileClass::CLASS32 => true,
-            ElfFileClass::CLASS64 => false,
+    fn is_32(&self) -> Result<bool, std::io::Error> {
+        match self.header.file_class {
+            ElfFileClass::CLASS32 => Ok(true),
+            ElfFileClass::CLASS64 => Ok(false),
             _ => {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::InvalidData,
                     "Unknown file class",
                 ))
             }
-        };
-
-        let header_size = if is_32 {
-            mem::size_of::<ProgramHeader32>()
-        } else {
-            mem::size_of::<ProgramHeader64>()
-        };
-
-        assert_eq!(header_size, self.header.prog_header_entry_size as _);
-        let total_size = header_size * self.header.prog_header_entry_num as usize;
-        let offset = self.header.prog_header_offset as _;
-
-        unsafe {
-            if is_32 {
-                let mut v =
-                    vec![mem::zeroed::<ProgramHeader32>(); self.header.prog_header_entry_num as _];
-                self.read_into_ptr(v.as_mut_ptr() as _, total_size, offset)?;
-                Ok(ProgramHeaders::Header32(v))
-            } else {
-                let mut v =
-                    vec![mem::zeroed::<ProgramHeader64>(); self.header.prog_header_entry_num as _];
-                self.read_into_ptr(v.as_mut_ptr() as _, total_size, offset)?;
-                Ok(ProgramHeaders::Header64(v))
-            }
         }
+    }
+
+    read_header! {
+        prog_headers,
+        ProgramHeaders,
+        prog_header_entry_size,
+        prog_header_entry_num,
+        prog_header_offset
+    }
+
+    read_header! {
+        sect_headers,
+        SectionHeaders,
+        sect_header_entry_size,
+        sect_header_entry_num,
+        sect_header_offset
     }
 }

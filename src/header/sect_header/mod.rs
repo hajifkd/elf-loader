@@ -1,3 +1,6 @@
+pub mod flag;
+pub mod sect_header_type;
+
 #[derive(Debug, Clone)]
 pub enum SectionHeaders {
     Header32(Vec<SectionHeader32>),
@@ -8,8 +11,8 @@ pub enum SectionHeaders {
 #[derive(Debug, Copy, Clone)]
 pub struct SectionHeader32 {
     pub name_index: u32,
-    pub sect_type: u32,
-    pub flags: u32,
+    pub sect_type: sect_header_type::SectionHeaderType,
+    pub flags: flag::SectionFlag32,
     pub addr: u32,
     pub offset: u32,
     pub size: u32,
@@ -23,8 +26,8 @@ pub struct SectionHeader32 {
 #[derive(Debug, Copy, Clone)]
 pub struct SectionHeader64 {
     pub name_index: u32,
-    pub sect_type: u32,
-    pub flags: u64,
+    pub sect_type: sect_header_type::SectionHeaderType,
+    pub flags: flag::SectionFlag64,
     pub addr: u64,
     pub offset: u64,
     pub size: u64,
