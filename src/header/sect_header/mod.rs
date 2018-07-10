@@ -1,6 +1,10 @@
 pub mod flag;
 pub mod sect_header_type;
 
+pub use self::flag::SectionFlag32;
+pub use self::flag::SectionFlag64;
+pub use self::sect_header_type::SectionHeaderType;
+
 #[derive(Debug, Clone)]
 pub enum SectionHeaders {
     Header32(Vec<SectionHeader32>),

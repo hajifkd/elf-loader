@@ -4,7 +4,7 @@ cenums! {
         const NONE = 0;
         const RELOCATABLE = 1;
         const EXECUTABLE = 2;
-        const SHAREDOBJECT = 3;
+        const SHARED_OBJECT = 3;
         const CORE = 4;
     }
 }

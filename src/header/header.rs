@@ -1,6 +1,7 @@
 use super::elf_type;
 use super::ident;
 use super::machine;
+use std;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -24,5 +25,20 @@ pub struct ElfHeader {
     pub prog_header_entry_num: u16,
     pub sect_header_entry_size: u16,
     pub sect_header_entry_num: u16,
-    pub sect_header_tbl_index: u16,
+    pub sect_header_name_tbl_index: u16,
+}
+
+impl ElfHeader {
+    pub fn is_32(&self) -> Result<bool, std::io::Error> {
+        match self.file_class {
+            ident::ElfFileClass::CLASS32 => Ok(true),
+            ident::ElfFileClass::CLASS64 => Ok(false),
+            _ => {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidData,
+                    "Unknown file class",
+                ))
+            }
+        }
+    }
 }
