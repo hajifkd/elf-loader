@@ -9,6 +9,18 @@ pub struct ElfLoader {
     memory: Option<*mut u8>,
 }
 
+impl Drop for ElfLoader {
+    fn drop(&mut self) {
+        if let Some(ptr) = self.memory {
+            unsafe {
+                aligned_alloc::aligned_free(ptr as _);
+            }
+        }
+
+        self.memory = None;
+    }
+}
+
 impl ElfLoader {
     pub fn new(path: &str) -> Result<ElfLoader, std::io::Error> {
         let res = ElfLoader {
@@ -39,11 +51,7 @@ impl ElfLoader {
         }
     }
 
-    pub fn allocate_memory(&mut self) {
-        if self.memory.is_some() {
-            return;
-        }
-
+    fn allocate_memory(&mut self) {
         macro_rules! max_addr {
             ($phdrs:expr) => {
                 $phdrs
@@ -67,7 +75,7 @@ impl ElfLoader {
         self.memory = Some(memory);
     }
 
-    pub fn apply_mprotect(&mut self) {
+    fn apply_mprotect(&mut self) {
         self.allocate_memory();
 
         macro_rules! mprotect {
@@ -91,6 +99,10 @@ impl ElfLoader {
     }
 
     pub fn load_memory(&mut self) {
+        if self.memory.is_some() {
+            return;
+        }
+
         self.allocate_memory();
 
         macro_rules! load_memory {
@@ -105,7 +117,7 @@ impl ElfLoader {
                         ).unwrap();
                     }
                 }
-            }
+            };
         }
 
         match self.elf_file.prog_headers {
