@@ -93,9 +93,9 @@ impl ElfLoader {
     pub fn load_memory(&mut self) {
         self.allocate_memory();
 
-        match self.elf_file.prog_headers {
-            ProgramHeaders::Header64(ref phdrs) => {
-                for phdr in phdrs {
+        macro_rules! load_memory {
+            ($phdrs:expr) => {
+                for phdr in $phdrs {
                     unsafe {
                         read_into_ptr(
                             &mut self.elf_file.file,
@@ -106,7 +106,11 @@ impl ElfLoader {
                     }
                 }
             }
-            _ => {}
+        }
+
+        match self.elf_file.prog_headers {
+            ProgramHeaders::Header64(ref phdrs) => load_memory!(phdrs),
+            ProgramHeaders::Header32(ref phdrs) => load_memory!(phdrs),
         }
 
         self.apply_mprotect();
