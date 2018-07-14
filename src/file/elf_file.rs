@@ -4,10 +4,8 @@ use header::sect_header::*;
 use std;
 use std::ffi::CStr;
 use std::fs::File;
-use std::io::SeekFrom;
-use std::io::prelude::*;
 use std::mem;
-use std::slice;
+use ::util::read_into_ptr;
 
 #[derive(Debug)]
 pub struct ElfFile {
@@ -16,19 +14,6 @@ pub struct ElfFile {
     pub prog_headers: ProgramHeaders,
     pub sect_headers: SectionHeaders,
     pub sect_header_names: Vec<String>,
-}
-
-unsafe fn read_into_ptr(
-    file: &mut File,
-    ptr: *mut u8,
-    size: usize,
-    offset: u64,
-) -> Result<(), std::io::Error> {
-    let slice = slice::from_raw_parts_mut(ptr, size);
-    file.seek(SeekFrom::Start(offset))?;
-    file.read_exact(slice)?;
-
-    Ok(())
 }
 
 macro_rules! read_header {
