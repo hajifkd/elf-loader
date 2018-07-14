@@ -4,6 +4,12 @@ version = "0.1.0"
 authors = ["Hajime Fukuda <hajime.fukuda@me.com>"]
 
 [dependencies]
-libc = "0.2"
+aligned_alloc = "0.1"
 bitflags = "1.0"
 cenums = {version = "0.1", git = "https://github.com/hajifkd/cenums"}
+
+[target.'cfg(unix)'.dependencies]
+libc = { version = "0.2"}
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = [ "memoryapi", "sysinfoapi" ]}

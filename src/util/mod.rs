@@ -1,6 +1,6 @@
 use std;
 use std::fs::File;
-use std::io::{Seek, SeekFrom, Read};
+use std::io::{Read, Seek, SeekFrom};
 use std::mem;
 
 /// Copied from https://github.com/quininer/memsec

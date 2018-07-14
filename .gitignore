@@ -4,3 +4,4 @@
 Cargo.lock
 busybox
 ls
+libc.so.6
