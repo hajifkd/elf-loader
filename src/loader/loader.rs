@@ -52,6 +52,10 @@ impl ElfLoader {
     }
 
     fn allocate_memory(&mut self) {
+        if self.memory.is_some() {
+            return;
+        }
+
         macro_rules! max_addr {
             ($phdrs:expr) => {
                 $phdrs
@@ -98,11 +102,13 @@ impl ElfLoader {
         }
     }
 
-    pub fn load_memory(&mut self) {
-        if self.memory.is_some() {
-            return;
+    pub fn get_entry_addr(&self) -> *mut u8 {
+        unsafe {
+            self.memory.unwrap().add(self.elf_file.header.entry)
         }
+    }
 
+    pub fn load_memory(&mut self) {
         self.allocate_memory();
 
         macro_rules! load_memory {
